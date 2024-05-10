@@ -1,5 +1,5 @@
 {
-  "name": "react-hook-form",
+  "name": "react-hook-form-sample",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.4"
   },
   "devDependencies": {
+    "@hookform/devtools": "^4.3.1",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
