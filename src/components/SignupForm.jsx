@@ -12,6 +12,7 @@ import { useState } from "react";
 //   },
 //    phoneNumbers:string[]
 //    hobbies:[{hobby:""}]
+//    age: number
 // };
 
 function SignUpForm() {
@@ -27,6 +28,7 @@ function SignUpForm() {
       return {
         email: data?.email,
         hobbies: [{ hobby: "" }],
+        dob: new Date(),
       };
     },
   });
@@ -186,6 +188,33 @@ function SignUpForm() {
               Add
             </button>
           </div>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="age">Age</label>
+          <input
+            type="number"
+            id="age"
+            {...register("age", {
+              valueAsNumber: true,
+              max: {
+                value: 80,
+                message: "can't be greater than 80",
+              },
+            })}
+          />
+          <p className="error">{errors.age?.message}</p>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="dob">DOB</label>
+          <input
+            type="date"
+            id="dob"
+            {...register("dob", {
+              valueAsDate: true,
+            })}
+          />
         </div>
 
         <button onClick={subb}>Submit</button>
