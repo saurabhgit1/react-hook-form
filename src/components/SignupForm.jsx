@@ -2,13 +2,40 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useState } from "react";
 
+// type FormValues = {
+//   username: string,
+//   email: string,
+//   channel: String,
+//   social: {
+//     twitter: string,
+//     facebook: String,
+//   },
+//    phoneNumbers:string[]
+// };
+
 function SignUpForm() {
-  const form = useForm();
+  const form = useForm({
+    // defaultValues: {
+    //   username:"myuser"
+    // }
+    defaultValues: async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/users/1"
+      );
+      const data = await response.json();
+      return {
+        email: data?.email,
+      };
+    },
+  });
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
 
   const onSubmit = (data) => {
-    console.log("form data", data);
+    console.log("form data", data, "errr", errors);
+  };
+  const subb = () => {
+    console.log("yeeeeee", errors);
   };
   return (
     <div>
@@ -64,7 +91,74 @@ function SignUpForm() {
           <p className="error">{errors.channel?.message}</p>
         </div>
 
-        <button>Submit</button>
+        <div className="form-control">
+          <label htmlFor="twitter">Twitter</label>
+          <input
+            type="text"
+            id="twitter"
+            {...register("social.twitter", {
+              required: {
+                value: true,
+                message: "twitter id is required",
+              },
+            })}
+          />
+          <p className="error">{errors.social?.twitter?.message}</p>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="facebook">Facebook</label>
+          <input
+            type="text"
+            id="facebook"
+            {...register("social.facebook", {
+              required: {
+                value: true,
+                message: "facebook id is required",
+              },
+            })}
+          />
+          <p className="error">{errors.social?.facebook?.message}</p>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="primary-phone">Primary Phone</label>
+          <input
+            type="text"
+            id="primary-phone"
+            {...register("phoneNumbers.0", {
+              required: {
+                value: true,
+                message: "primary phone is required",
+              },
+              validate: {
+                notAll9: (fieldValue) => {
+                  return [...fieldValue.toString()].every((char) => char == 9)
+                    ? "All 9 not allowed"
+                    : true;
+                },
+              },
+            })}
+          />
+          <p className="error">{errors.phoneNumbers?.[0]?.message}</p>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="secondary-phone">Secondary Phone</label>
+          <input
+            type="text"
+            id="secondary-phone"
+            {...register("phoneNumbers.1", {
+              required: {
+                value: true,
+                message: "secondary phone is required",
+              },
+            })}
+          />
+          <p className="error">{errors.phoneNumbers?.[1]?.message}</p>
+        </div>
+
+        <button onClick={subb}>Submit</button>
       </form>
       <DevTool control={control}></DevTool>
     </div>
