@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useState } from "react";
 
@@ -11,6 +11,7 @@ import { useState } from "react";
 //     facebook: String,
 //   },
 //    phoneNumbers:string[]
+//    hobbies:[{hobby:""}]
 // };
 
 function SignUpForm() {
@@ -25,11 +26,16 @@ function SignUpForm() {
       const data = await response.json();
       return {
         email: data?.email,
+        hobbies: [{ hobby: "" }],
       };
     },
   });
   const { register, control, handleSubmit, formState } = form;
   const { errors } = formState;
+  const { fields, append, remove } = useFieldArray({
+    name: "hobbies",
+    control: control,
+  });
 
   const onSubmit = (data) => {
     console.log("form data", data, "errr", errors);
@@ -156,6 +162,30 @@ function SignUpForm() {
             })}
           />
           <p className="error">{errors.phoneNumbers?.[1]?.message}</p>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="secondary-phone">Hobbies</label>
+          <div>
+            {fields.map((field, index) => {
+              return (
+                <div className="form-control" key={field.id}>
+                  <input
+                    type="text"
+                    {...register("hobbies." + index + ".hobby")}
+                  />
+                  {index > 0 && (
+                    <button type="button" onClick={() => remove(index)}>
+                      Remove
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+            <button type="button" onClick={() => append({ hobby: "" })}>
+              Add
+            </button>
+          </div>
         </div>
 
         <button onClick={subb}>Submit</button>
